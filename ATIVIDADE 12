@@ -1,0 +1,55 @@
+#include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+  setlocale(LC_ALL, "Portuguese");
+  char alunos[5][50];
+  int opcao;
+
+
+  telaInicial(&opcao);
+  switch (opcao) {
+  case 1:;
+    cadastroAluno(&alunos);
+
+    break;
+  }
+
+  return 0;
+}
+
+// Função para exibir a tela inicial
+int telaInicial(int *opcao) {
+  setlocale(LC_ALL, "Portuguese");
+
+  printf("==========={ MENU }===========\n\n");
+  printf("Digite o numero da opcao desejada\n");
+  printf("1 - Cadastrar notas\n");
+  printf("2 - Editar notas\n");
+  printf("3 - Consultar Notas\n");
+  printf("4 - Sair\n");
+  printf("Opcao:");
+  scanf("%i", opcao);
+
+  return 0;
+}
+// Função para cadastrar alunos
+int cadastroAluno(char alunos[][50]) {
+  printf("==========={CADASTRO DE NOMES}===========");
+  int opcaoAlunos;
+  for (int i = 0; i < 5; i++){
+    printf("\nDigite o nome de um aluno:");
+    scanf("%s", alunos[i]);
+  }
+  printf("==========={CADASTRO DE NOTAS}===========");
+  printf("Digite o número correspondente ao aluno que deseja editar\n");
+  printf("1 - %s\n", alunos[0]);
+  printf("2 - %s\n", alunos[1]);
+  printf("3 - %s\n", alunos[2]);
+  printf("4 - %s\n", alunos[3]);
+  printf("5 - %s\n", alunos[4]);
+  scanf("%i", opcaoAlunos);
+
+  return 0;
+}
