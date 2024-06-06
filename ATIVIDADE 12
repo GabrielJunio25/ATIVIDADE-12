@@ -1,55 +1,105 @@
-#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define NUM_ALUNOS 5
+#define NUM_NOTAS 4
+
+typedef struct {
+    char nome[50];
+    int notas[NUM_NOTAS];
+    float media;
+    char resultado[20]; // Aumentei o tamanho do array para acomodar "Recuperação"
+} Aluno;
+
+Aluno alunos[NUM_ALUNOS];
+
+void cadastrarAlunos() {
+    printf("=== Cadastro de Alunos ===\n");
+    for (int i = 0; i < NUM_ALUNOS; i++) {
+        printf("Digite o nome do aluno %d: ", i + 1);
+        scanf("%s", alunos[i].nome);
+        for (int j = 0; j < NUM_NOTAS; j++) {
+            do {
+                printf("Digite a nota %d do aluno %s: ", j + 1, alunos[i].nome);
+                scanf("%d", &alunos[i].notas[j]);
+                if (alunos[i].notas[j] < 0 || alunos[i].notas[j] > 10) {
+                    printf("Nota inválida! Digite novamente.\n");
+                }
+            } while (alunos[i].notas[j] < 0 || alunos[i].notas[j] > 10);
+        }
+    }
+}
+
+void calcularMedia() {
+    for (int i = 0; i < NUM_ALUNOS; i++) {
+        int soma = 0;
+        for (int j = 0; j < NUM_NOTAS; j++) {
+            soma += alunos[i].notas[j];
+        }
+        alunos[i].media = (float)soma / NUM_NOTAS;
+    }
+}
+
+void calcularResultado() {
+    for (int i = 0; i < NUM_ALUNOS; i++) {
+        if (alunos[i].media < 4) {
+            strcpy(alunos[i].resultado, "Reprovado");
+        } else if (alunos[i].media < 6) {
+            strcpy(alunos[i].resultado, "Recuperação");
+        } else {
+            strcpy(alunos[i].resultado, "Aprovado");
+        }
+    }
+}
+
+void imprimirResultados() {
+    printf("\n=== Resultados ===\n");
+    for (int i = 0; i < NUM_ALUNOS; i++) {
+        printf("Aluno %s: Média = %.2f, Resultado = %s\n", alunos[i].nome, alunos[i].media, alunos[i].resultado);
+    }
+}
+
+void editarResultado() {
+    printf("\n=== Edição de Resultado ===\n");
+    int opcao;
+    printf("Digite o número do aluno que deseja editar o resultado (de 1 a %d): ", NUM_ALUNOS);
+    scanf("%d", &opcao);
+    if (opcao >= 1 && opcao <= NUM_ALUNOS) {
+        printf("Digite o novo resultado do aluno %s (Aprovado/Recuperação/Reprovado): ", alunos[opcao - 1].nome);
+        scanf("%s", alunos[opcao - 1].resultado);
+    } else {
+        printf("Opção inválida!\n");
+    }
+}
 
 int main() {
-  setlocale(LC_ALL, "Portuguese");
-  char alunos[5][50];
-  int opcao;
+    cadastrarAlunos();
+    calcularMedia();
+    calcularResultado();
+    imprimirResultados();
 
+    int opcao;
+    do {
+        printf("\n=== Menu ===\n");
+        printf("1. Editar resultado de um aluno\n");
+        printf("2. Sair\n");
+        printf("Opção: ");
+        scanf("%d", &opcao);
 
-  telaInicial(&opcao);
-  switch (opcao) {
-  case 1:;
-    cadastroAluno(&alunos);
+        switch (opcao) {
+            case 1:
+                editarResultado();
+                imprimirResultados();
+                break;
+            case 2:
+                printf("Encerrando o programa.\n");
+                break;
+            default:
+                printf("Opção inválida!\n");
+        }
+    } while (opcao != 2);
 
-    break;
-  }
-
-  return 0;
+    return 0;
 }
 
-// Função para exibir a tela inicial
-int telaInicial(int *opcao) {
-  setlocale(LC_ALL, "Portuguese");
-
-  printf("==========={ MENU }===========\n\n");
-  printf("Digite o numero da opcao desejada\n");
-  printf("1 - Cadastrar notas\n");
-  printf("2 - Editar notas\n");
-  printf("3 - Consultar Notas\n");
-  printf("4 - Sair\n");
-  printf("Opcao:");
-  scanf("%i", opcao);
-
-  return 0;
-}
-// Função para cadastrar alunos
-int cadastroAluno(char alunos[][50]) {
-  printf("==========={CADASTRO DE NOMES}===========");
-  int opcaoAlunos;
-  for (int i = 0; i < 5; i++){
-    printf("\nDigite o nome de um aluno:");
-    scanf("%s", alunos[i]);
-  }
-  printf("==========={CADASTRO DE NOTAS}===========");
-  printf("Digite o número correspondente ao aluno que deseja editar\n");
-  printf("1 - %s\n", alunos[0]);
-  printf("2 - %s\n", alunos[1]);
-  printf("3 - %s\n", alunos[2]);
-  printf("4 - %s\n", alunos[3]);
-  printf("5 - %s\n", alunos[4]);
-  scanf("%i", opcaoAlunos);
-
-  return 0;
-}
